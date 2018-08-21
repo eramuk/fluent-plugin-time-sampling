@@ -4,11 +4,12 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |gem|
   gem.name          = "fluent-plugin-time-sampling"
-  gem.version       = "0.1.0"
+  gem.version       = "0.1.1"
   gem.authors       = ["Yuki Kuwabara"]
   gem.email         = ["eramuk@gmail.com"]
   gem.summary       = "filtering record at prescribed intervals"
   gem.description   = gem.summary
+  gem.homepage      = "https://github.com/eramuk/fluent-plugin-time-sampling"
   gem.licenses      = ["MIT"]
 
   gem.files         = `git ls-files`.split($/)
