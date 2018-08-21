@@ -1,5 +1,12 @@
 # fluent-plugin-time-sampling
 
+## Requirements
+
+| fluent-plugin-time-sampling | fluentd    |
+|-----------------------------|------------|
+| >= 1.0.0                    | >= v0.14.0 |
+| <  1.0.0                    | <  v0.14.0 |
+
 ## Installation
 ```
 gem install fluent-plugin-time-sampling

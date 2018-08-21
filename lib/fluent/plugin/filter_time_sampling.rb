@@ -1,12 +1,9 @@
-require "fluent/output"
-require "fluent/time"
-require "fluent/timezone"
-require "fluent/config/error"
+require "fluent/plugin/filter"
 require "date"
 
-module Fluent
+module Fluent::Plugin
   class TimeSamplingFilter < Filter
-    Plugin.register_filter('time_sampling', self)
+    Fluent::Plugin.register_filter('time_sampling', self)
 
     config_param :unit, :array, value_type: :string
     config_param :keep_keys, :array, value_type: :string, default: []
@@ -17,8 +14,8 @@ module Fluent
       @cache = {}
       @cache_period = @interval * 2
       @interval = -1 if @interval.zero?
-      @unused_cache_clear_interval = 300
-      @unused_cache_clear_time = Time.now
+      @old_cache_clear_interval = 300
+      @old_cache_clear_time = Time.now
     end
 
     def start
@@ -49,9 +46,9 @@ module Fluent
           record.dup : record.select { |k, v| @keep_keys.include?(k) }
       end
 
-      if Time.now > @unused_cache_clear_time + @unused_cache_clear_interval
-        clear_unused_cache
-        @unused_cache_clear_time = Time.now
+      if Time.now > @old_cache_clear_time + @old_cache_clear_interval
+        clear_old_cache
+        @old_cache_clear_time = Time.now
       end
 
       new_record ||= nil
@@ -70,7 +67,7 @@ module Fluent
       end
     end
 
-    def clear_unused_cache
+    def clear_old_cache
       @cache.each_key do |key|
         expired = Time.now > @cache[key][:time] + @cache_period
         @cache.delete(key) if expired

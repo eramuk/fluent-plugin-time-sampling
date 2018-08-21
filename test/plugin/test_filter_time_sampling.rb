@@ -6,22 +6,26 @@ class TimeSamplingFilterTest < Test::Unit::TestCase
   end
 
   CONFIG = %q{
-    unit _source_address, ${tag}
-    keep_keys _source_address
+    unit ${tag}, sample_key1
+    keep_keys sample_key2
   }
 
   def create_driver(conf = CONFIG, tag = "tag.test")
-    Fluent::Test::FilterTestDriver.new(Fluent::TimeSamplingFilter, tag).configure(conf)
+    Fluent::Test::Driver::Filter.new(Fluent::Plugin::TimeSamplingFilter).configure(conf)
   end
 
   def test_filter
-    msg = {"_source_address" => "127.0.0.1", "foo" => "bar", "hoge" => "fuga"}
+    sample_records = [
+      {"sample_key1" => "foo", "sample_key2" => "aaa"},
+      {"sample_key1" => "foo", "sample_key2" => "bbb"},
+      {"sample_key1" => "bar", "sample_key2" => "ccc"},
+    ]
     d = create_driver
-    d.run {
-      d.filter(msg, @time)
-    }
-    filtered = d.filtered_as_array
-    p filtered.map {|m| m[2] }
+    d.run(default_tag: "test") do
+      sample_records.each do |record|
+        d.feed(record)
+      end
+    end
+    p d.filtered
   end
-
 end
