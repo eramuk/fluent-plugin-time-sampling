@@ -10,7 +10,7 @@ class TimeSamplingFilterTest < Test::Unit::TestCase
     keep_keys sample_key2
   }
 
-  def create_driver(conf = CONFIG, tag = "tag.test")
+  def create_driver(conf = CONFIG)
     Fluent::Test::Driver::Filter.new(Fluent::Plugin::TimeSamplingFilter).configure(conf)
   end
 

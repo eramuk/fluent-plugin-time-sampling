@@ -25,15 +25,17 @@ Example:
 
 Assume following input in 10 seconds:
 ```
-sample.tag { "hostname": "host1", "sample_key1": "foo", "sample_key2": "aaa" }
-sample.tag { "hostname": "host1", "sample_key1": "foo", "sample_key2": "bbb" }
-sample.tag { "hostname": "host2", "sample_key1": "bar", "sample_key2": "ccc" }
+test.tag { "hostname": "host1", "sample_key1": "foo", "sample_key2": "aaa" }
+test.tag { "hostname": "host1", "sample_key1": "foo", "sample_key2": "bbb" }
+test.tag { "hostname": "host2", "sample_key1": "bar", "sample_key2": "ccc" }
+test.tag { "hostname": "host2", "sample_key1": "baz", "sample_key2": "ddd" }
 ```
 
 then output is below:
 ```
-sample.tag { "hostname": "host1", "sample_key2": "aaa" }
-sample.tag { "hostname": "host2", "sample_key2": "ccc" }
+test.tag { "hostname": "host1", "sample_key2": "aaa" }
+test.tag { "hostname": "host2", "sample_key2": "ccc" }
+test.tag { "hostname": "host2", "sample_key2": "ddd" }
 ```
 
 ## Configuration

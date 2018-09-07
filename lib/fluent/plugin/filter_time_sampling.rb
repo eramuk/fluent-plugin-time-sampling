@@ -12,10 +12,9 @@ module Fluent::Plugin
     def configure(conf)
       super
       @cache = {}
-      @cache_period = @interval * 2
+      @cache_clear_lasttime = Time.now
+      @cache_clear_interval = @interval * 2
       @interval = -1 if @interval.zero?
-      @old_cache_clear_interval = 300
-      @old_cache_clear_time = Time.now
     end
 
     def start
@@ -46,9 +45,9 @@ module Fluent::Plugin
           record.dup : record.select { |k, v| @keep_keys.include?(k) }
       end
 
-      if Time.now > @old_cache_clear_time + @old_cache_clear_interval
-        clear_old_cache
-        @old_cache_clear_time = Time.now
+      if Time.now > @cache_clear_lasttime + @cache_clear_interval
+        clear_cache
+        @cache_clear_lasttime = Time.now
       end
 
       new_record ||= nil
@@ -67,9 +66,9 @@ module Fluent::Plugin
       end
     end
 
-    def clear_old_cache
+    def clear_cache
       @cache.each_key do |key|
-        expired = Time.now > @cache[key][:time] + @cache_period
+        expired = Time.now > @cache[key][:time]
         @cache.delete(key) if expired
       end
     end
