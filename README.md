@@ -17,25 +17,25 @@ Example:
 ```
 <filter test.**>
   @type time_sampling
-  unit ${tag}, hostname, sample_key1
+  unit ${tag}, hostname
   interval 10
-  keep_keys hostname, sample_key2
 </filter>
 ```
 
 Assume following input in 10 seconds:
 ```
-test.tag { "hostname": "host1", "sample_key1": "foo", "sample_key2": "aaa" }
-test.tag { "hostname": "host1", "sample_key1": "foo", "sample_key2": "bbb" }
-test.tag { "hostname": "host2", "sample_key1": "bar", "sample_key2": "ccc" }
-test.tag { "hostname": "host2", "sample_key1": "baz", "sample_key2": "ddd" }
+test.tag1 { "hostname": "host1", "sample_key1": "100", "sample_key2": "aaa" }
+test.tag1 { "hostname": "host1", "sample_key1": "200", "sample_key2": "bbb" }
+test.tag1 { "hostname": "host1", "sample_key1": "300", "sample_key2": "ccc" }
+test.tag1 { "hostname": "host2", "sample_key1": "100", "sample_key2": "ddd" }
+test.tag1 { "hostname": "host2", "sample_key1": "200", "sample_key2": "eee" }
+test.tag2 { "hostname": "host2", "sample_key1": "300", "sample_key2": "fff" }
 ```
 
 then output is below:
 ```
-test.tag { "hostname": "host1", "sample_key2": "aaa" }
-test.tag { "hostname": "host2", "sample_key2": "ccc" }
-test.tag { "hostname": "host2", "sample_key2": "ddd" }
+test.tag { "hostname": "host1", "sample_key1": "100", "sample_key2": "aaa" }
+test.tag { "hostname": "host2", "sample_key1": "100", "sample_key2": "ddd" }
 ```
 
 ## Configuration
